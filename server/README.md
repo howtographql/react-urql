@@ -1,16 +1,13 @@
-# React & urql Tutorial
+# React & urql Tutorial (Server)
 
-This is the sample project that belongs to the [React & urql Tutorial](https://www.howtographql.com/react-urql/0-introduction/) on How to GraphQL.
+This is the server as part of the sample project that belongs
+to the [React & urql Tutorial](https://www.howtographql.com/react-urql/0-introduction/)
+on How to GraphQL.
 
-## How to use
+More instructions can be found in the root folder of this repository (`../`),
+but if you're here, you're likely looking to do the following:
 
-### 1. Clone repository
-
-```sh
-git clone https://github.com/howtographql/react-urql/
-```
-
-### 2. Install dependencies & Deploy the Prisma database API
+### 1. Install dependencies & Deploy the Prisma database API
 
 Install the Prisma CLI globally with Yarn or npm:
 
@@ -74,7 +71,7 @@ Then, follow these steps in the interactive CLI wizard:
 
 </details>
 
-### 3. Start the server
+### 2. Start the server
 
 To start the server, all you need to do is execute the `start` script by running the following command inside the `server` directory:
 
@@ -82,16 +79,6 @@ To start the server, all you need to do is execute the `start` script by running
 yarn start
 ```
 
-> **Note**: If you want to interact with the GraphQL API of the server inside a [GraphQL Playground](https://github.com/prisma/graphql-playground), you can navigate to [http://localhost:4000](http://localhost:4000).
+### 3. Start the app
 
-### 4. Run the app
-
-Now that the server is running, you can start the React app as well. The commands need to be run in a new terminal tab/window inside the root directory `react-urql` (because the current tab is blocked by the process running the server):
-
-```sh
-# install app dependencies & deploy
-yarn install
-yarn start
-```
-
-You can now open your browser and use the app on [http://localhost:3000](http://localhost:3000).
+Now follow the instructions in "4. Run the app" in the [`README.md`](../README.md) in the root folder.
