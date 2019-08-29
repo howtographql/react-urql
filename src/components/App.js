@@ -6,11 +6,12 @@ import { Switch, Route, Redirect } from 'react-router-dom'
 import Login from './Login'
 import Search from './Search'
 
+const Fetching = () => <p>Fetcing</p>
 const App = () => (
   <div className="center w85">
     <Header />
     <div className="ph3 pv1 background-gray">
-      <React.Suspense fallback={<p>Fetching</p>}>
+      <React.Suspense fallback={<Fetching />}>
         <Switch>
           <Route exact path="/" render={() => <Redirect to="/new/1" />} />
           <Route exact path="/create" component={CreateLink} />

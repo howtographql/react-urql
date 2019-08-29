@@ -12,7 +12,7 @@ import {
   subscriptionExchange
 } from "urql";
 import { cacheExchange } from '@urql/exchange-graphcache'
-import { suspenseExchange } from '@urql/exchange-suspense'
+// import { suspenseExchange } from '@urql/exchange-suspense'
 import { BrowserRouter } from 'react-router-dom'
 import { AUTH_TOKEN, LINKS_PER_PAGE } from './constants'
 import { FEED_QUERY } from './components/LinkList';
@@ -66,7 +66,7 @@ const client = createClient({
   // suspense: true,
   exchanges: [
     dedupExchange,
-    suspenseExchange,
+    // suspenseExchange,
     cache,
     fetchExchange,
     subscriptionExchange({
