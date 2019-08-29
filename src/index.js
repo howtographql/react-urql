@@ -16,7 +16,6 @@ import App from "./components/App";
 import { AUTH_TOKEN, LINKS_PER_PAGE } from './constants';
 import { FEED_QUERY } from './components/LinkList';
 import * as serviceWorker from "./serviceWorker";
-// import { timeDifferenceForDate } from './utils';
 
 const cache = cacheExchange({
   keys: {
@@ -27,19 +26,6 @@ const cache = cacheExchange({
   },
   // Optimistic is not possible due to the nature of the data-structure
   // every vote needs to have an unique id for a unique userId...
-
-  // We could write a custom resolver to format the datetime of a post
-  // to indicate the text of x time ago.
-  // TODO: found inconsistency with resolvers
-  // Initial write does not respect the resolvers given for querying data.
-  // resolvers: {
-  //   Link: {
-  //     createdAt: (parent) => {
-  //       console.log('in link resolver');
-  //       return timeDifferenceForDate(parent.createdAt);
-  //     }
-  //   }
-  // },
 
   // Mutations that need updates due to adding/removing/... to a list
   // Will most likely come here. We can't make assumptions for adding to
