@@ -30,7 +30,7 @@ const Link = ({ link, index }) => {
   const voteMutation = React.useCallback(() => {
     executeMutation({ linkId: link.id });
   }, [link, executeMutation]);
-
+  console.log(link);
   return (
     <div className="flex mt2 items-start">
       <div className="flex items-center">

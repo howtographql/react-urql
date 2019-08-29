@@ -28,13 +28,12 @@ const Login = ({ history }) => {
   const [{ fetching }, executeMutation] = useMutation(login ? LOGIN_MUTATION : SIGNUP_MUTATION);
 
   const mutate = React.useCallback(() => {
-    executeMutation({ email, password, name }).then(result => {
-      console.log(result);
-      const { token } = login ? result.login : result.signup;
+    executeMutation({ email, password, name }).then(({ data }) => {
+      const { token } = login ? data.login : data.signup;
       localStorage.setItem(AUTH_TOKEN, token);
       history.push(`/`);
     });
-  }, [email, password, name, executeMutation]);
+  }, [email, password, name, executeMutation, history, login]);
 
   return (
     <div>
