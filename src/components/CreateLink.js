@@ -1,8 +1,7 @@
-import React, { Component } from 'react'
-import { Mutation } from 'react-apollo'
+import React from 'react'
+import { useMutation } from 'urql'
 import gql from 'graphql-tag'
-import { FEED_QUERY } from './LinkList'
-import { LINKS_PER_PAGE } from '../constants'
+import usePreviousValue from '../hooks/usePreviousValue';
 
 const POST_MUTATION = gql`
   mutation PostMutation($description: String!, $url: String!) {
@@ -15,57 +14,43 @@ const POST_MUTATION = gql`
   }
 `
 
-class CreateLink extends Component {
-  state = {
-    description: '',
-    url: '',
-  }
+const CreateLink = ({ history }) => {
+  const [description, setDescription] = React.useState("");
+  const [url, setUrl] = React.useState('');
+  const [state, executeMutation] = useMutation(POST_MUTATION);
+  const prevFetching = usePreviousValue(state.fetching);
 
-  render() {
-    const { description, url } = this.state
-    return (
-      <div>
-        <div className="flex flex-column mt3">
-          <input
-            className="mb2"
-            value={description}
-            onChange={e => this.setState({ description: e.target.value })}
-            type="text"
-            placeholder="A description for the link"
-          />
-          <input
-            className="mb2"
-            value={url}
-            onChange={e => this.setState({ url: e.target.value })}
-            type="text"
-            placeholder="The URL for the link"
-          />
-        </div>
-        <Mutation
-          mutation={POST_MUTATION}
-          variables={{ description, url }}
-          onCompleted={() => this.props.history.push('/new/1')}
-          update={(store, { data: { post } }) => {
-            const first = LINKS_PER_PAGE
-            const skip = 0
-            const orderBy = 'createdAt_DESC'
-            const data = store.readQuery({
-              query: FEED_QUERY,
-              variables: { first, skip, orderBy },
-            })
-            data.feed.links.unshift(post)
-            store.writeQuery({
-              query: FEED_QUERY,
-              data,
-              variables: { first, skip, orderBy },
-            })
-          }}
-        >
-          {postMutation => <button onClick={postMutation}>Submit</button>}
-        </Mutation>
+  React.useEffect(() => {
+    if (state.fetching === false && prevFetching === true) {
+      history.push('/new/1')
+    }
+  }, [state.fetching, prevFetching, history]);
+
+  const postMutation = React.useCallback(() => {
+    executeMutation({ url, description });
+  }, [url, description, executeMutation]);
+
+  return (
+    <div>
+      <div className="flex flex-column mt3">
+        <input
+          className="mb2"
+          value={description}
+          onChange={e => setDescription(e.target.value)}
+          type="text"
+          placeholder="A description for the link"
+        />
+        <input
+          className="mb2"
+          value={url}
+          onChange={e => setUrl(e.target.value)}
+          type="text"
+          placeholder="The URL for the link"
+        />
       </div>
-    )
-  }
+      <button onClick={postMutation}>Submit</button>
+    </div>
+  );
 }
 
 export default CreateLink
