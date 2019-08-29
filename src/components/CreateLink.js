@@ -1,7 +1,6 @@
 import React from 'react';
 import { useMutation } from 'urql';
 import gql from 'graphql-tag';
-import usePreviousValue from '../hooks/usePreviousValue';
 
 const POST_MUTATION = gql`
   mutation PostMutation($description: String!, $url: String!) {
@@ -17,18 +16,13 @@ const POST_MUTATION = gql`
 const CreateLink = ({ history }) => {
   const [description, setDescription] = React.useState("");
   const [url, setUrl] = React.useState('');
-  const [state, executeMutation] = useMutation(POST_MUTATION);
-  const prevFetching = usePreviousValue(state.fetching);
-
-  React.useEffect(() => {
-    if (state.fetching === false && prevFetching === true) {
-      history.push('/new/1');
-    }
-  }, [state.fetching, prevFetching, history]);
+  const [{ fetching }, executeMutation] = useMutation(POST_MUTATION);
 
   const postMutation = React.useCallback(() => {
-    executeMutation({ url, description });
-  }, [url, description, executeMutation]);
+    executeMutation({ url, description }).then(() => {
+      history.push('/new/1');
+    });
+  }, [url, description, executeMutation, history]);
 
   return (
     <div>
@@ -48,7 +42,7 @@ const CreateLink = ({ history }) => {
           placeholder="The URL for the link"
         />
       </div>
-      <button onClick={postMutation}>Submit</button>
+      <button disabled={fetching} onClick={postMutation}>Submit</button>
     </div>
   );
 }

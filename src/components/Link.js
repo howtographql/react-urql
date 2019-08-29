@@ -25,7 +25,7 @@ const VOTE_MUTATION = gql`
 
 const Link = ({ link, index }) => {
   const authToken = localStorage.getItem(AUTH_TOKEN);
-  const [, executeMutation] = useMutation(VOTE_MUTATION);
+  const [{ fetching }, executeMutation] = useMutation(VOTE_MUTATION);
 
   const voteMutation = React.useCallback(() => {
     executeMutation({ linkId: link.id });
@@ -36,7 +36,7 @@ const Link = ({ link, index }) => {
       <div className="flex items-center">
         <span className="gray">{index + 1}.</span>
         {authToken && (
-          <div className="ml1 gray f11" onClick={voteMutation}>
+          <div className="ml1 gray f11" onClick={voteMutation} disabled={fetching}>
             ▲
           </div>
         )}

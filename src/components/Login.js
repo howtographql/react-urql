@@ -1,7 +1,6 @@
 import React from 'react';
 import { useMutation } from 'urql';
 import gql from 'graphql-tag';
-import usePreviousValue from '../hooks/usePreviousValue';
 import { AUTH_TOKEN } from "../constants";
 
 const SIGNUP_MUTATION = gql`
@@ -26,20 +25,16 @@ const Login = ({ history }) => {
   const [password, setPassword] = React.useState('');
   const [name, setName] = React.useState('');
 
-  const [{ fetching, data }, executeMutation] = useMutation(login ? LOGIN_MUTATION : SIGNUP_MUTATION);
-  const prevFetching = usePreviousValue(fetching);
+  const [{ fetching }, executeMutation] = useMutation(login ? LOGIN_MUTATION : SIGNUP_MUTATION);
 
   const mutate = React.useCallback(() => {
-    executeMutation({ email, password, name });
+    executeMutation({ email, password, name }).then(result => {
+      console.log(result);
+      const { token } = login ? result.login : result.signup;
+      localStorage.setItem(AUTH_TOKEN, token);
+      history.push(`/`);
+    });
   }, [email, password, name, executeMutation]);
-
-  React.useEffect(() => {
-    if (prevFetching === true && fetching === false && data) {
-        const { token } = login ? data.login : data.signup;
-        localStorage.setItem(AUTH_TOKEN, token);
-        history.push(`/`);
-    }
-  }, [prevFetching, fetching, history, data, login])
 
   return (
     <div>
@@ -67,15 +62,21 @@ const Login = ({ history }) => {
         />
       </div>
       <div className="flex mt3">
-        <div className="pointer mr2 button" onClick={mutate}>
+        <button
+          type="button"
+          className="pointer mr2 button"
+          onClick={mutate}
+          disabled={fetching}
+        >
           {login ? "login" : "create account"}
-        </div>
-        <div
+        </button>
+        <button
+          type="button"
           className="pointer button"
           onClick={() => setLogin(!login)}
         >
           {login ? "need to create an account?" : "already have an account?"}
-        </div>
+        </button>
       </div>
     </div>
   );
