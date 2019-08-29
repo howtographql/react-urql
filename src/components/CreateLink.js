@@ -42,7 +42,7 @@ const CreateLink = ({ history }) => {
           placeholder="The URL for the link"
         />
       </div>
-      <button disabled={fetching} onClick={postMutation}>Submit</button>
+      <button type="button" disabled={fetching} onClick={postMutation}>Submit</button>
     </div>
   );
 }
