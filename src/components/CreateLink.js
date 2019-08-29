@@ -1,6 +1,6 @@
-import React from 'react'
-import { useMutation } from 'urql'
-import gql from 'graphql-tag'
+import React from 'react';
+import { useMutation } from 'urql';
+import gql from 'graphql-tag';
 import usePreviousValue from '../hooks/usePreviousValue';
 
 const POST_MUTATION = gql`
@@ -22,7 +22,7 @@ const CreateLink = ({ history }) => {
 
   React.useEffect(() => {
     if (state.fetching === false && prevFetching === true) {
-      history.push('/new/1')
+      history.push('/new/1');
     }
   }, [state.fetching, prevFetching, history]);
 
@@ -53,4 +53,4 @@ const CreateLink = ({ history }) => {
   );
 }
 
-export default CreateLink
+export default CreateLink;

@@ -1,8 +1,8 @@
-import React, { Fragment } from 'react'
-import Link from './Link'
-import { useQuery, useSubscription } from 'urql'
-import gql from 'graphql-tag'
-import { LINKS_PER_PAGE } from '../constants'
+import React, { Fragment } from 'react';
+import { useQuery, useSubscription } from 'urql';
+import gql from 'graphql-tag';
+import { LINKS_PER_PAGE } from '../constants';
+import Link from "./Link";
 
 export const FEED_QUERY = gql`
   query FeedQuery($first: Int, $skip: Int, $orderBy: LinkOrderByInput) {
@@ -26,7 +26,7 @@ export const FEED_QUERY = gql`
       count
     }
   }
-`
+`;
 
 const NEW_LINKS_SUBSCRIPTION = gql`
   subscription {
@@ -47,7 +47,7 @@ const NEW_LINKS_SUBSCRIPTION = gql`
       }
     }
   }
-`
+`;
 
 const NEW_VOTES_SUBSCRIPTION = gql`
   subscription {
@@ -74,7 +74,7 @@ const NEW_VOTES_SUBSCRIPTION = gql`
       }
     }
   }
-`
+`;
 
 const LinkList = ({ location, match, history }) => {
   const isNewPage = location.pathname.includes("new");
@@ -92,12 +92,8 @@ const LinkList = ({ location, match, history }) => {
     variables: getQueryVariables(),
   });
 
-  useSubscription({
-    query: NEW_VOTES_SUBSCRIPTION
-  });
-  useSubscription({
-    query: NEW_LINKS_SUBSCRIPTION
-  });
+  useSubscription({ query: NEW_VOTES_SUBSCRIPTION });
+  useSubscription({ query: NEW_LINKS_SUBSCRIPTION });
 
   const linksToRender = React.useMemo(() => {
     if (fetching) return [];
@@ -153,4 +149,4 @@ const LinkList = ({ location, match, history }) => {
   );
 }
 
-export default LinkList
+export default LinkList;

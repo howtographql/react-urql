@@ -1,12 +1,12 @@
-import React from 'react'
-import LinkList from './LinkList'
-import CreateLink from './CreateLink'
-import Header from './Header'
-import { Switch, Route, Redirect } from 'react-router-dom'
-import Login from './Login'
-import Search from './Search'
+import React from 'react';
+import { Switch, Route, Redirect } from "react-router-dom";
+import LinkList from './LinkList';
+import CreateLink from './CreateLink';
+import Header from './Header';
+import Login from './Login';
+import Search from './Search';
 
-const Fetching = () => <p>Fetcing</p>
+const Fetching = () => <p>Fetcing</p>;
 const App = () => (
   <div className="center w85">
     <Header />
@@ -25,4 +25,4 @@ const App = () => (
   </div>
 );
 
-export default App
+export default App;

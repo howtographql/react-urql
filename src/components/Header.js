@@ -1,10 +1,10 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import { withRouter } from 'react-router'
-import { AUTH_TOKEN } from '../constants'
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { withRouter } from 'react-router';
+import { AUTH_TOKEN } from '../constants';
 
 const Header = ({ history }) => {
-  const authToken = localStorage.getItem(AUTH_TOKEN)
+  const authToken = localStorage.getItem(AUTH_TOKEN);
   return (
     <div className="flex pa1 justify-between nowrap orange">
       <div className="flex flex-fixed black">
@@ -47,7 +47,7 @@ const Header = ({ history }) => {
           )}
       </div>
     </div>
-  )
+  );
 }
 
-export default withRouter(Header)
+export default withRouter(Header);

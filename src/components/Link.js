@@ -1,8 +1,8 @@
-import React from 'react'
-import { AUTH_TOKEN } from '../constants'
-import { timeDifferenceForDate } from '../utils'
-import { useMutation } from 'urql'
-import gql from 'graphql-tag'
+import React from 'react';
+import { useMutation } from 'urql';
+import gql from 'graphql-tag';
+import { timeDifferenceForDate } from "../utils";
+import { AUTH_TOKEN } from "../constants";
 
 const VOTE_MUTATION = gql`
   mutation VoteMutation($linkId: ID!) {
@@ -21,14 +21,14 @@ const VOTE_MUTATION = gql`
       }
     }
   }
-`
+`;
 
 const Link = ({ link, index }) => {
   const authToken = localStorage.getItem(AUTH_TOKEN);
   const [, executeMutation] = useMutation(VOTE_MUTATION);
 
   const voteMutation = React.useCallback(() => {
-    executeMutation({ linkId: link.id })
+    executeMutation({ linkId: link.id });
   }, [link, executeMutation]);
 
   return (
@@ -54,7 +54,7 @@ const Link = ({ link, index }) => {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default Link
+export default Link;

@@ -1,8 +1,8 @@
-import React from 'react'
-import { AUTH_TOKEN } from '../constants'
-import { useMutation } from 'urql'
-import gql from 'graphql-tag'
+import React from 'react';
+import { useMutation } from 'urql';
+import gql from 'graphql-tag';
 import usePreviousValue from '../hooks/usePreviousValue';
+import { AUTH_TOKEN } from "../constants";
 
 const SIGNUP_MUTATION = gql`
   mutation SignupMutation($email: String!, $password: String!, $name: String!) {
@@ -10,7 +10,7 @@ const SIGNUP_MUTATION = gql`
       token
     }
   }
-`
+`;
 
 const LOGIN_MUTATION = gql`
   mutation LoginMutation($email: String!, $password: String!) {
@@ -18,7 +18,7 @@ const LOGIN_MUTATION = gql`
       token
     }
   }
-`
+`;
 
 const Login = ({ history }) => {
   const [login, setLogin] = React.useState(true);
@@ -81,4 +81,4 @@ const Login = ({ history }) => {
   );
 }
 
-export default Login
+export default Login;

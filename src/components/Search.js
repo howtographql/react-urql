@@ -1,7 +1,7 @@
-import React from 'react'
-import { useQuery } from 'urql'
-import gql from 'graphql-tag'
-import Link from './Link'
+import React from 'react';
+import { useQuery } from 'urql';
+import gql from 'graphql-tag';
+import Link from './Link';
 
 const FEED_SEARCH_QUERY = gql`
   query FeedSearchQuery($filter: String!) {
@@ -24,7 +24,7 @@ const FEED_SEARCH_QUERY = gql`
       }
     }
   }
-`
+`;
 
 const Search = () => {
   const [filter, setFilter] = React.useState('');
@@ -43,7 +43,7 @@ const Search = () => {
         <Link key={link.id} link={link} index={index} />
       ))}
     </div>
-  )
+  );
 }
 
-export default Search
+export default Search;

@@ -1,8 +1,5 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import './styles/index.css'
-import App from './components/App'
-import * as serviceWorker from './serviceWorker'
+import React from 'react';
+import ReactDOM from 'react-dom';
 import { SubscriptionClient } from "subscriptions-transport-ws";
 import {
   Provider,
@@ -10,12 +7,15 @@ import {
   fetchExchange,
   dedupExchange,
   subscriptionExchange
-} from "urql";
-import { cacheExchange } from '@urql/exchange-graphcache'
-// import { suspenseExchange } from '@urql/exchange-suspense'
-import { BrowserRouter } from 'react-router-dom'
+} from "urql";;
+import { cacheExchange } from '@urql/exchange-graphcache';
+// import { suspenseExchange } from '@urql/exchange-suspense';
+import { BrowserRouter } from 'react-router-dom';
+import "./styles/index.css";
+import App from "./components/App";
 import { AUTH_TOKEN, LINKS_PER_PAGE } from './constants'
 import { FEED_QUERY } from './components/LinkList';
+import * as serviceWorker from "./serviceWorker";
 
 const cache = cacheExchange({
   keys: {
@@ -82,5 +82,6 @@ ReactDOM.render(
     </Provider>
   </BrowserRouter>,
   document.getElementById('root'),
-)
-serviceWorker.unregister()
+);
+
+serviceWorker.unregister();
