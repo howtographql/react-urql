@@ -28,7 +28,6 @@ const FEED_SEARCH_QUERY = gql`
 
 const Search = () => {
   const [filter, setFilter] = React.useState('');
-
   const [result] = useQuery({ query: FEED_SEARCH_QUERY, variables: { filter} });
 
   return (

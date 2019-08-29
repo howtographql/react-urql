@@ -24,32 +24,25 @@ const cache = cacheExchange({
   },
   updates: {
     Mutation: {
-      post: (result, args, cache) => {
-        // This doesn't seem needed...
-        // const first = LINKS_PER_PAGE
-        // const skip = 0
-        // const orderBy = 'createdAt_DESC'
-        // cache.updateQuery(FEED_QUERY, { first, skip, orderBy }, data => {
-        //   data.feed.links.unshift(post);
-        //   return data;
-        // });
+      post: ({ post }, _, cache) => {
+        const first = LINKS_PER_PAGE
+        const skip = 0
+        const orderBy = 'createdAt_DESC'
+        cache.updateQuery(FEED_QUERY, { first, skip, orderBy }, data => {
+          data.feed.links.unshift(post);
+          return data;
+        });
       },
-      vote: () => {
-        // This doesn't seem needed...
-        // _updateCacheAfterVote = (store, createVote, linkId) => {
-        //   const isNewPage = this.props.location.pathname.includes("new");
-        //   const page = parseInt(this.props.match.params.page, 10);
-        //   const skip = isNewPage ? (page - 1) * LINKS_PER_PAGE : 0;
-        //   const first = isNewPage ? LINKS_PER_PAGE : 100;
-        //   const orderBy = isNewPage ? "createdAt_DESC" : null;
-        //   const data = store.readQuery({
-        //     query: FEED_QUERY,
-        //     variables: { first, skip, orderBy }
-        //   });
-        //   const votedLink = data.feed.links.find(link => link.id === linkId);
-        //   votedLink.votes = createVote.link.votes;
-        //   store.writeQuery({ query: FEED_QUERY, data });
-        // };
+    },
+    Subscription: {
+      newLink: ({ newLink }, _, cache) => {
+        const first = LINKS_PER_PAGE
+        const skip = 0
+        const orderBy = 'createdAt_DESC'
+        cache.updateQuery(FEED_QUERY, { first, skip, orderBy }, data => {
+          data.feed.links.unshift(newLink);
+          return data;
+        });
       }
     }
   }
