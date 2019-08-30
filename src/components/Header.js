@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { withRouter } from 'react-router';
-import { AUTH_TOKEN } from '../constants';
+import { getToken, removeToken } from "../utils";
 
 const Header = ({ history }) => {
-  const authToken = localStorage.getItem(AUTH_TOKEN);
+  const authToken = getToken();
   return (
     <div className="flex pa1 justify-between nowrap orange">
       <div className="flex flex-fixed black">
@@ -34,8 +34,8 @@ const Header = ({ history }) => {
           <div
             className="ml1 pointer black"
             onClick={() => {
-              localStorage.removeItem(AUTH_TOKEN)
-              history.push(`/`)
+              removeToken();
+              history.push(`/`);
             }}
           >
             logout

@@ -78,7 +78,8 @@ const NEW_VOTES_SUBSCRIPTION = gql`
 
 const LinkList = ({ location, match, history }) => {
   const isNewPage = location.pathname.includes("new");
-  const getQueryVariables = React.useCallback(() => {
+
+  const variables = React.useMemo(() => {
     const page = parseInt(match.params.page, 10);
 
     const skip = isNewPage ? (page - 1) * LINKS_PER_PAGE : 0;
@@ -89,7 +90,7 @@ const LinkList = ({ location, match, history }) => {
 
   const [{ data, error, fetching }] = useQuery({
     query: FEED_QUERY,
-    variables: getQueryVariables(),
+    variables,
   });
 
   useSubscription({ query: NEW_VOTES_SUBSCRIPTION });

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useMutation } from 'urql';
 import gql from 'graphql-tag';
-import { AUTH_TOKEN } from "../constants";
+import { setToken } from '../utils';
 
 const SIGNUP_MUTATION = gql`
   mutation SignupMutation($email: String!, $password: String!, $name: String!) {
@@ -30,7 +30,7 @@ const Login = ({ history }) => {
   const mutate = React.useCallback(() => {
     executeMutation({ email, password, name }).then(({ data }) => {
       const { token } = login ? data.login : data.signup;
-      localStorage.setItem(AUTH_TOKEN, token);
+      setToken(token);
       history.push(`/`);
     });
   }, [email, password, name, executeMutation, history, login]);

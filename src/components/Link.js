@@ -1,8 +1,7 @@
 import React from 'react';
 import { useMutation } from 'urql';
 import gql from 'graphql-tag';
-import { timeDifferenceForDate } from "../utils";
-import { AUTH_TOKEN } from "../constants";
+import { timeDifferenceForDate, getToken } from "../utils";
 
 const VOTE_MUTATION = gql`
   mutation VoteMutation($linkId: ID!) {
@@ -24,13 +23,13 @@ const VOTE_MUTATION = gql`
 `;
 
 const Link = ({ link, index }) => {
-  const authToken = localStorage.getItem(AUTH_TOKEN);
+  const authToken = getToken();
   const [{ fetching }, executeMutation] = useMutation(VOTE_MUTATION);
 
   const voteMutation = React.useCallback(() => {
     executeMutation({ linkId: link.id });
   }, [link, executeMutation]);
-  console.log(link);
+
   return (
     <div className="flex mt2 items-start">
       <div className="flex items-center">

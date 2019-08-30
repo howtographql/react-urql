@@ -13,9 +13,10 @@ import { cacheExchange } from '@urql/exchange-graphcache';
 import { BrowserRouter } from 'react-router-dom';
 import "./styles/index.css";
 import App from "./components/App";
-import { AUTH_TOKEN, LINKS_PER_PAGE } from './constants';
+import { LINKS_PER_PAGE } from './constants';
 import { FEED_QUERY } from './components/LinkList';
 import * as serviceWorker from "./serviceWorker";
+import { getToken } from './utils';
 
 const cache = cacheExchange({
   keys: {
@@ -26,6 +27,9 @@ const cache = cacheExchange({
   },
   // Optimistic is not possible due to the nature of the data-structure
   // every vote needs to have an unique id for a unique userId...
+
+  // We could write a resolver to format createdAt to the new value as well.
+  // This would be dependent on a new version of the graphcache.
 
   // Mutations that need updates due to adding/removing/... to a list
   // Will most likely come here. We can't make assumptions for adding to
@@ -67,7 +71,7 @@ const subscriptionClient = new SubscriptionClient(
 
 const client = createClient({
   fetchOptions: () => {
-    const token = localStorage.getItem(AUTH_TOKEN);
+    const token = getToken();
     return {
       headers: {
         authorization: token ? `Bearer ${token}` : ""
@@ -75,6 +79,7 @@ const client = createClient({
     }
   },
   url: "http://localhost:4000",
+  // TODO: suspense is waiting for new urql version
   // suspense: true,
   exchanges: [
     dedupExchange,
