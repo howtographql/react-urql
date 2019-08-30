@@ -14,7 +14,7 @@ const POST_MUTATION = gql`
 `
 
 const CreateLink = ({ history }) => {
-  const [description, setDescription] = React.useState("");
+  const [description, setDescription] = React.useState('');
   const [url, setUrl] = React.useState('');
   const [{ fetching }, executeMutation] = useMutation(POST_MUTATION);
 

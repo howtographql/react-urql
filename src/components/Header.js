@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { withRouter } from 'react-router';
-import { getToken, removeToken } from "../utils";
+import { getToken, removeToken } from '../utils';
 
 const Header = ({ history }) => {
   const authToken = getToken();
@@ -35,7 +35,7 @@ const Header = ({ history }) => {
             className="ml1 pointer black"
             onClick={() => {
               removeToken();
-              history.push(`/`);
+              history.push('/');
             }}
           >
             logout

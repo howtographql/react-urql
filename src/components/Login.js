@@ -37,7 +37,7 @@ const Login = ({ history }) => {
 
   return (
     <div>
-      <h4 className="mv3">{login ? "Login" : "Sign Up"}</h4>
+      <h4 className="mv3">{login ? 'Login' : 'Sign Up'}</h4>
       <div className="flex flex-column">
         {!login && (
           <input
@@ -67,14 +67,14 @@ const Login = ({ history }) => {
           onClick={mutate}
           disabled={fetching}
         >
-          {login ? "login" : "create account"}
+          {login ? 'login' : 'create account'}
         </button>
         <button
           type="button"
           className="pointer button"
           onClick={() => setLogin(!login)}
         >
-          {login ? "need to create an account?" : "already have an account?"}
+          {login ? 'need to create an account?' : 'already have an account?'}
         </button>
       </div>
     </div>

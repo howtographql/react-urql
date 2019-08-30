@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import { useQuery, useSubscription } from 'urql';
 import gql from 'graphql-tag';
 import { LINKS_PER_PAGE } from '../constants';
-import Link from "./Link";
+import Link from './Link';
 
 export const FEED_QUERY = gql`
   query FeedQuery($first: Int, $skip: Int, $orderBy: LinkOrderByInput) {
@@ -77,14 +77,14 @@ const NEW_VOTES_SUBSCRIPTION = gql`
 `;
 
 const LinkList = ({ location, match, history }) => {
-  const isNewPage = location.pathname.includes("new");
+  const isNewPage = location.pathname.includes('new');
 
   const variables = React.useMemo(() => {
     const page = parseInt(match.params.page, 10);
 
     const skip = isNewPage ? (page - 1) * LINKS_PER_PAGE : 0;
     const first = isNewPage ? LINKS_PER_PAGE : 100;
-    const orderBy = isNewPage ? "createdAt_DESC" : null;
+    const orderBy = isNewPage ? 'createdAt_DESC' : null;
     return { first, skip, orderBy };
   }, [match, isNewPage]);
 

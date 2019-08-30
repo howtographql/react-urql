@@ -1,7 +1,7 @@
 import React from 'react';
 import { useMutation } from 'urql';
 import gql from 'graphql-tag';
-import { timeDifferenceForDate, getToken } from "../utils";
+import { timeDifferenceForDate, getToken } from '../utils';
 
 const VOTE_MUTATION = gql`
   mutation VoteMutation($linkId: ID!) {
