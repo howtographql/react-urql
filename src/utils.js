@@ -36,4 +36,4 @@ export function timeDifferenceForDate(date) {
 
 export const getToken = () => window.localStorage.getItem(AUTH_TOKEN);
 export const setToken = (token) => window.localStorage.setItem(AUTH_TOKEN, token);
-export const removeToen = () => window.localStorage.removeItem(AUTH_TOKEN);
+export const deleteToken = () => window.localStorage.removeItem(AUTH_TOKEN);

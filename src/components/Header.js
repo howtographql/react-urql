@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { withRouter } from 'react-router';
-import { getToken, removeToken } from '../utils';
+import { getToken, deleteToken } from '../utils';
 
 const Header = ({ history }) => {
   const authToken = getToken();
@@ -34,7 +34,7 @@ const Header = ({ history }) => {
           <div
             className="ml1 pointer black"
             onClick={() => {
-              removeToken();
+              deleteToken();
               history.push('/');
             }}
           >
