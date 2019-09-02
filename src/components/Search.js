@@ -1,7 +1,8 @@
-import React, { Component } from 'react'
-import { withApollo } from 'react-apollo'
-import gql from 'graphql-tag'
-import Link from './Link'
+import React from 'react';
+import { useQuery } from 'urql';
+import gql from 'graphql-tag';
+
+import Link from './Link';
 
 const FEED_SEARCH_QUERY = gql`
   query FeedSearchQuery($filter: String!) {
@@ -24,41 +25,38 @@ const FEED_SEARCH_QUERY = gql`
       }
     }
   }
-`
+`;
 
-class Search extends Component {
-  state = {
-    links: [],
-    filter: '',
-  }
+const Search = () => {
+  const [filter, setFilter] = React.useState('');
 
-  render() {
-    return (
+  const [result, executeQuery] = useQuery({
+    query: FEED_SEARCH_QUERY,
+    variables: { filter },
+    pause: true,
+  });
+
+  const search = React.useCallback(() => {
+    executeQuery();
+  }, [executeQuery]);
+
+  const links = result.data ? result.data.feed.links : [];
+
+  return (
+    <div>
       <div>
-        <div>
-          Search
-          <input
-            type="text"
-            onChange={e => this.setState({ filter: e.target.value })}
-          />
-          <button onClick={() => this._executeSearch()}>OK</button>
-        </div>
-        {this.state.links.map((link, index) => (
-          <Link key={link.id} link={link} index={index} />
-        ))}
+        Search
+        <input
+          type="text"
+          onChange={e => setFilter(e.target.value)}
+        />
+        <button onClick={search}>search</button>
       </div>
-    )
-  }
-
-  _executeSearch = async () => {
-    const { filter } = this.state
-    const result = await this.props.client.query({
-      query: FEED_SEARCH_QUERY,
-      variables: { filter },
-    })
-    const links = result.data.feed.links
-    this.setState({ links })
-  }
+      {links.map((link, index) => (
+        <Link key={link.id} link={link} index={index} />
+      ))}
+    </div>
+  );
 }
 
-export default withApollo(Search)
+export default Search;

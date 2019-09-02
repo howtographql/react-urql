@@ -24,17 +24,3 @@ exports.Prisma = prisma_lib_1.makePrismaClientClass({
   secret: `mysecret123`
 });
 exports.prisma = new exports.Prisma();
-var models = [
-  {
-    name: "Link",
-    embedded: false
-  },
-  {
-    name: "User",
-    embedded: false
-  },
-  {
-    name: "Vote",
-    embedded: false
-  }
-];

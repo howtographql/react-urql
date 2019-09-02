@@ -1,63 +1,91 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import './styles/index.css'
-import App from './components/App'
-import * as serviceWorker from './serviceWorker'
-import { ApolloProvider } from 'react-apollo'
-import { ApolloClient } from 'apollo-client'
-import { createHttpLink } from 'apollo-link-http'
-import { InMemoryCache } from 'apollo-cache-inmemory'
-import { BrowserRouter } from 'react-router-dom'
-import { setContext } from 'apollo-link-context'
-import { AUTH_TOKEN } from './constants'
-import { split } from 'apollo-link'
-import { WebSocketLink } from 'apollo-link-ws'
-import { getMainDefinition } from 'apollo-utilities'
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-const httpLink = createHttpLink({
-  uri: 'http://localhost:4000',
-})
+import { BrowserRouter } from 'react-router-dom';
+import { SubscriptionClient } from "subscriptions-transport-ws";
 
-const authLink = setContext((_, { headers }) => {
-  const token = localStorage.getItem(AUTH_TOKEN)
-  return {
-    headers: {
-      ...headers,
-      authorization: token ? `Bearer ${token}` : '',
+import {
+  Provider,
+  createClient,
+  fetchExchange,
+  dedupExchange,
+  subscriptionExchange
+} from "urql";
+
+import { cacheExchange } from '@urql/exchange-graphcache';
+
+import "./styles/index.css";
+
+import App from './components/App';
+import { FEED_QUERY } from './components/LinkList';
+import { getToken } from './token';
+
+const cache = cacheExchange({
+  updates: {
+    Mutation: {
+      post: ({ post }, _args, cache) => {
+        const variables = { first: 10, skip: 0, orderBy: "createdAt_DESC" };
+        cache.updateQuery({ query: FEED_QUERY, variables }, data => {
+          if (data !== null) {
+            data.feed.links.unshift(post);
+            data.feed.count++;
+            return data;
+          } else {
+            return null;
+          }
+        });
+      }
     },
+    Subscription: {
+      newLink: ({ newLink }, _args, cache) => {
+        const variables = { first: 10, skip: 0, orderBy: "createdAt_DESC" };
+        cache.updateQuery({ query: FEED_QUERY, variables }, data => {
+          if (data !== null) {
+            data.feed.links.unshift(newLink);
+            data.feed.count++;
+            return data;
+          } else {
+            return null;
+          }
+        });
+      }
+    }
   }
-})
+});
 
-const wsLink = new WebSocketLink({
-  uri: `ws://localhost:4000`,
-  options: {
+const subscriptionClient = new SubscriptionClient(
+  'ws://localhost:4000',
+  {
     reconnect: true,
     connectionParams: {
-      authToken: localStorage.getItem(AUTH_TOKEN),
-    },
-  },
-})
+      authToken: getToken()
+    }
+  }
+);
 
-const link = split(
-  ({ query }) => {
-    const { kind, operation } = getMainDefinition(query)
-    return kind === 'OperationDefinition' && operation === 'subscription'
+const client = createClient({
+  url: 'http://localhost:4000',
+  fetchOptions: () => {
+    const token = getToken();
+    return {
+      headers: { authorization: token ? `Bearer ${token}` : '' }
+    }
   },
-  wsLink,
-  authLink.concat(httpLink),
-)
-
-const client = new ApolloClient({
-  link,
-  cache: new InMemoryCache(),
-})
+  exchanges: [
+    dedupExchange,
+    cache,
+    fetchExchange,
+    subscriptionExchange({
+      forwardSubscription: operation => subscriptionClient.request(operation)
+    })
+  ]
+});
 
 ReactDOM.render(
   <BrowserRouter>
-    <ApolloProvider client={client}>
+    <Provider value={client}>
       <App />
-    </ApolloProvider>
+    </Provider>
   </BrowserRouter>,
   document.getElementById('root'),
-)
-serviceWorker.unregister()
+);
