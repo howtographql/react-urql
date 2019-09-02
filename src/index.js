@@ -21,11 +21,6 @@ import { FEED_QUERY } from './components/LinkList';
 import { getToken } from './token';
 
 const cache = cacheExchange({
-  keys: {
-    Feed: data => data.id || null,
-    Link: data => data.id || null,
-    Post: data => data.id || null
-  },
   updates: {
     Mutation: {
       post: ({ post }, _args, cache) => {
