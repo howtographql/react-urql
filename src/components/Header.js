@@ -5,6 +5,10 @@ import { getToken, deleteToken } from '../utils';
 
 const Header = ({ history }) => {
   const authToken = getToken();
+  const logout = React.useCallback(() => {
+    deleteToken();
+    history.push('/');
+  }, [history])
   return (
     <div className="flex pa1 justify-between nowrap orange">
       <div className="flex flex-fixed black">
@@ -33,10 +37,7 @@ const Header = ({ history }) => {
         {authToken ? (
           <div
             className="ml1 pointer black"
-            onClick={() => {
-              deleteToken();
-              history.push('/');
-            }}
+            onClick={logout}
           >
             logout
           </div>
