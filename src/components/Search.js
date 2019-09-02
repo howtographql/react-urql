@@ -28,7 +28,12 @@ const FEED_SEARCH_QUERY = gql`
 
 const Search = () => {
   const [filter, setFilter] = React.useState('');
-  const [result] = useQuery({ query: FEED_SEARCH_QUERY, variables: { filter} });
+  const [result, executeQuery] = useQuery({ query: FEED_SEARCH_QUERY, variables: { filter}, pause: true });
+
+  const links = result.data ? result.data.feed.links : [];
+  const search = React.useCallback(() => {
+    executeQuery();
+  }, [executeQuery]);
 
   return (
     <div>
@@ -38,8 +43,9 @@ const Search = () => {
           type="text"
           onChange={e => setFilter(e.target.value)}
         />
+        <button onClick={search}>search</button>
       </div>
-      {result.data && result.data.feed && result.data.feed.links.map((link, index) => (
+      {links.map((link, index) => (
         <Link key={link.id} link={link} index={index} />
       ))}
     </div>

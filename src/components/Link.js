@@ -27,8 +27,10 @@ const Link = ({ link, index }) => {
   const [{ fetching }, executeMutation] = useMutation(VOTE_MUTATION);
 
   const voteMutation = React.useCallback(() => {
-    executeMutation({ linkId: link.id });
-  }, [link, executeMutation]);
+    if (!fetching) {
+      executeMutation({ linkId: link.id });
+    }
+  }, [fetching, link, executeMutation]);
 
   return (
     <div className="flex mt2 items-start">
