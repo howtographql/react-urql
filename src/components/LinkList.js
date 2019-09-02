@@ -1,7 +1,7 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { useQuery, useSubscription } from 'urql';
 import gql from 'graphql-tag';
-import { LINKS_PER_PAGE } from '../constants';
+
 import Link from './Link';
 
 export const FEED_QUERY = gql`
@@ -76,59 +76,54 @@ const NEW_VOTES_SUBSCRIPTION = gql`
   }
 `;
 
-const LinkList = ({ location, match, history }) => {
-  const isNewPage = location.pathname.includes('new');
+const LinkList = props => {
+  const isNewPage = props.location.pathname.includes('new')
+  const page = parseInt(props.match.params.page, 10)
 
-  const variables = React.useMemo(() => {
-    const page = parseInt(match.params.page, 10);
+  const variables = React.useMemo(() => ({
+    skip: isNewPage ? (page - 1) * 10 : 0,
+    first: isNewPage ? 10 : 100,
+    orderBy: isNewPage ? 'createdAt_DESC' : null
+  }), [isNewPage, page])
 
-    const skip = isNewPage ? (page - 1) * LINKS_PER_PAGE : 0;
-    const first = isNewPage ? LINKS_PER_PAGE : 100;
-    const orderBy = isNewPage ? 'createdAt_DESC' : null;
-    return { first, skip, orderBy };
-  }, [match, isNewPage]);
-
-  const [{ data, error, fetching }] = useQuery({
-    query: FEED_QUERY,
-    variables,
-  });
+  const [result] = useQuery({ query: FEED_QUERY, variables });
+  const { data, fetching, error } = result;
 
   useSubscription({ query: NEW_VOTES_SUBSCRIPTION });
   useSubscription({ query: NEW_LINKS_SUBSCRIPTION });
 
   const linksToRender = React.useMemo(() => {
-    if (fetching) return [];
-    if (isNewPage) return data.feed.links;
-    const rankedLinks = data.feed.links.slice();
-    rankedLinks.sort((l1, l2) => l2.votes.length - l1.votes.length);
-    return rankedLinks;
-  }, [data, fetching, isNewPage]);
+    if (!data) {
+      return [];
+    } else if (isNewPage) {
+      return data.feed.links;
+    } else {
+      const rankedLinks = data.feed.links
+        .slice()
+        .sort((l1, l2) => l2.votes.length - l1.votes.length);
+      return rankedLinks;
+    }
+  }, [data, isNewPage]);
 
   const nextPage = React.useCallback(() => {
-    const page = parseInt(match.params.page, 10);
-    if (page <= data.feed.count / LINKS_PER_PAGE) {
-      const nextPage = page + 1;
-      history.push(`/new/${nextPage}`);
+    if (page <= data.feed.count / 10) {
+      props.history.push(`/new/${page + 1}`);
     }
-  }, [data, history, match.params]);
+  }, [props.history, data.feed.count, page]);
 
   const previousPage = React.useCallback(() => {
-    const page = parseInt(match.params.page, 10);
     if (page > 1) {
-      const previousPage = page - 1;
-      history.push(`/new/${previousPage}`);
+      props.history.push(`/new/${page - 1}`);
     }
-  }, [match, history]);
+  }, [props.history, page]);
 
   if (fetching) return <div>Fetching</div>;
   if (error) return <div>Error</div>;
 
-  const pageIndex =match.params.page
-    ? (match.params.page - 1) * LINKS_PER_PAGE
-    : 0;
+  const pageIndex = isNewPage ? (page - 1) * 10 : 0
 
   return (
-    <Fragment>
+    <React.Fragment>
       {linksToRender.map((link, index) => (
         <Link
           key={link.id}
@@ -146,7 +141,7 @@ const LinkList = ({ location, match, history }) => {
           </div>
         </div>
       )}
-    </Fragment>
+    </React.Fragment>
   );
 }
 

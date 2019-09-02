@@ -1,5 +1,3 @@
-import { AUTH_TOKEN } from "./constants";
-
 function timeDifference(current, previous) {
   const milliSecondsPerMinute = 60 * 1000;
   const milliSecondsPerHour = milliSecondsPerMinute * 60;
@@ -33,7 +31,3 @@ export function timeDifferenceForDate(date) {
   const updated = new Date(date).getTime();
   return timeDifference(now, updated);
 }
-
-export const getToken = () => window.localStorage.getItem(AUTH_TOKEN);
-export const setToken = (token) => window.localStorage.setItem(AUTH_TOKEN, token);
-export const deleteToken = () => window.localStorage.removeItem(AUTH_TOKEN);

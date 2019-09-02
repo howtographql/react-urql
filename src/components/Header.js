@@ -1,14 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { withRouter } from 'react-router';
-import { getToken, deleteToken } from '../utils';
+
+import { getToken, deleteToken } from '../token';
 
 const Header = ({ history }) => {
-  const authToken = getToken();
-  const logout = React.useCallback(() => {
-    deleteToken();
-    history.push('/');
-  }, [history])
+  const isLoggedIn = !!getToken();
+
   return (
     <div className="flex pa1 justify-between nowrap orange">
       <div className="flex flex-fixed black">
@@ -24,7 +22,7 @@ const Header = ({ history }) => {
         <Link to="/search" className="ml1 no-underline black">
           search
         </Link>
-        {authToken && (
+        {isLoggedIn && (
           <div className="flex">
             <div className="ml1">|</div>
             <Link to="/create" className="ml1 no-underline black">
@@ -34,10 +32,13 @@ const Header = ({ history }) => {
         )}
       </div>
       <div className="flex flex-fixed">
-        {authToken ? (
+        {isLoggedn ? (
           <div
             className="ml1 pointer black"
-            onClick={logout}
+            onClick={() => {
+              deleteToken()
+              props.history.push('/')
+            }}
           >
             logout
           </div>

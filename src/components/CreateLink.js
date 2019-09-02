@@ -11,18 +11,19 @@ const POST_MUTATION = gql`
       description
     }
   }
-`
+`;
 
-const CreateLink = ({ history }) => {
+const CreateLink = props => {
   const [description, setDescription] = React.useState('');
   const [url, setUrl] = React.useState('');
-  const [{ fetching }, executeMutation] = useMutation(POST_MUTATION);
+
+  const [state, executeMutation] = useMutation(POST_MUTATION);
 
   const postMutation = React.useCallback(() => {
     executeMutation({ url, description }).then(() => {
-      history.push('/new/1');
+      props.history.push('/new/1');
     });
-  }, [url, description, executeMutation, history]);
+  }, [executeMutation, url, description, executeMutation, props.history]);
 
   return (
     <div>
@@ -42,11 +43,14 @@ const CreateLink = ({ history }) => {
           placeholder="The URL for the link"
         />
       </div>
-      <button type="button" disabled={fetching} onClick={postMutation}>
+      <button
+        disabled={state.fetching}
+        onClick={postMutation}
+      >
         Submit
       </button>
     </div>
   );
-}
+};
 
 export default CreateLink;

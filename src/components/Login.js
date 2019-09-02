@@ -1,7 +1,8 @@
 import React from 'react';
 import { useMutation } from 'urql';
 import gql from 'graphql-tag';
-import { setToken } from '../utils';
+
+import { setToken } from '../token';
 
 const SIGNUP_MUTATION = gql`
   mutation SignupMutation($email: String!, $password: String!, $name: String!) {
@@ -19,21 +20,26 @@ const LOGIN_MUTATION = gql`
   }
 `;
 
-const Login = ({ history }) => {
+const Login = props => {
   const [login, setLogin] = React.useState(true);
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [name, setName] = React.useState('');
 
-  const [{ fetching }, executeMutation] = useMutation(login ? LOGIN_MUTATION : SIGNUP_MUTATION);
+  const [state, executeMutation] = useMutation(
+    isLogin ? LOGIN_MUTATION : SIGNUP_MUTATION
+  );
 
   const mutate = React.useCallback(() => {
-    executeMutation({ email, password, name }).then(({ data }) => {
-      const { token } = login ? data.login : data.signup;
-      setToken(token);
-      history.push(`/`);
-    });
-  }, [email, password, name, executeMutation, history, login]);
+    executeMutation({ email, password, name })
+      .then(({ data }) => {
+        const token = data && data[isLogin ? 'login' : 'signup'].token
+        if (token) {
+          setToken(token)
+          props.history.push('/')
+        }
+      });
+  }, [executeMutation, props.history, setToken, email, password, name]);
 
   return (
     <div>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useQuery } from 'urql';
 import gql from 'graphql-tag';
+
 import Link from './Link';
 
 const FEED_SEARCH_QUERY = gql`
@@ -28,12 +29,18 @@ const FEED_SEARCH_QUERY = gql`
 
 const Search = () => {
   const [filter, setFilter] = React.useState('');
-  const [result, executeQuery] = useQuery({ query: FEED_SEARCH_QUERY, variables: { filter}, pause: true });
 
-  const links = result.data ? result.data.feed.links : [];
+  const [result, executeQuery] = useQuery({
+    query: FEED_SEARCH_QUERY,
+    variables: { filter },
+    pause: true,
+  });
+
   const search = React.useCallback(() => {
     executeQuery();
   }, [executeQuery]);
+
+  const links = result.data ? result.data.feed.links : [];
 
   return (
     <div>
