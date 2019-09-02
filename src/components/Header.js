@@ -4,7 +4,7 @@ import { withRouter } from 'react-router';
 
 import { getToken, deleteToken } from '../token';
 
-const Header = ({ history }) => {
+const Header = (props) => {
   const isLoggedIn = !!getToken();
 
   return (
@@ -32,21 +32,21 @@ const Header = ({ history }) => {
         )}
       </div>
       <div className="flex flex-fixed">
-        {isLoggedn ? (
+        {isLoggedIn ? (
           <div
             className="ml1 pointer black"
             onClick={() => {
-              deleteToken()
-              props.history.push('/')
+              deleteToken();
+              props.history.push("/");
             }}
           >
             logout
           </div>
         ) : (
-            <Link to="/login" className="ml1 no-underline black">
-              login
+          <Link to="/login" className="ml1 no-underline black">
+            login
           </Link>
-          )}
+        )}
       </div>
     </div>
   );

@@ -21,12 +21,12 @@ const LOGIN_MUTATION = gql`
 `;
 
 const Login = props => {
-  const [login, setLogin] = React.useState(true);
+  const [isLogin, setLogin] = React.useState(true);
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [name, setName] = React.useState('');
 
-  const [state, executeMutation] = useMutation(
+  const [{ fetching }, executeMutation] = useMutation(
     isLogin ? LOGIN_MUTATION : SIGNUP_MUTATION
   );
 
@@ -39,13 +39,13 @@ const Login = props => {
           props.history.push('/')
         }
       });
-  }, [executeMutation, props.history, setToken, email, password, name]);
+  }, [executeMutation, props.history, email, password, name, isLogin]);
 
   return (
     <div>
-      <h4 className="mv3">{login ? 'Login' : 'Sign Up'}</h4>
+      <h4 className="mv3">{isLogin ? "Login" : "Sign Up"}</h4>
       <div className="flex flex-column">
-        {!login && (
+        {!isLogin && (
           <input
             value={name}
             onChange={e => setName(e.target.value)}
@@ -73,14 +73,14 @@ const Login = props => {
           onClick={mutate}
           disabled={fetching}
         >
-          {login ? 'login' : 'create account'}
+          {isLogin ? "login" : "create account"}
         </button>
         <button
           type="button"
           className="pointer button"
-          onClick={() => setLogin(!login)}
+          onClick={() => setLogin(!isLogin)}
         >
-          {login ? 'need to create an account?' : 'already have an account?'}
+          {isLogin ? "need to create an account?" : "already have an account?"}
         </button>
       </div>
     </div>

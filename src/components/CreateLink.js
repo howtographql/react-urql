@@ -9,6 +9,16 @@ const POST_MUTATION = gql`
       createdAt
       url
       description
+      postedBy {
+        id
+        name
+      }
+      votes {
+        id
+        user {
+          id
+        }
+      }
     }
   }
 `;
@@ -23,7 +33,7 @@ const CreateLink = props => {
     executeMutation({ url, description }).then(() => {
       props.history.push('/new/1');
     });
-  }, [executeMutation, url, description, executeMutation, props.history]);
+  }, [url, description, executeMutation, props.history]);
 
   return (
     <div>

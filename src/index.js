@@ -21,33 +21,38 @@ import { FEED_QUERY } from './components/LinkList';
 import { getToken } from './token';
 
 const cache = cacheExchange({
+  keys: {
+    Feed: data => data.id || null,
+    Link: data => data.id || null,
+    Post: data => data.id || null
+  },
   updates: {
     Mutation: {
       post: ({ post }, _args, cache) => {
-        const variables = { first: 10, skip: 0, orderBy: 'createdAt_DESC' }
+        const variables = { first: 10, skip: 0, orderBy: "createdAt_DESC" };
         cache.updateQuery({ query: FEED_QUERY, variables }, data => {
           if (data !== null) {
-            data.feed.links.unshift(post)
-            data.feed.count++
-            return data
+            data.feed.links.unshift(post);
+            data.feed.count++;
+            return data;
           } else {
-            return null
+            return null;
           }
-        })
+        });
       }
     },
     Subscription: {
       newLink: ({ newLink }, _args, cache) => {
-        const variables = { first: 10, skip: 0, orderBy: 'createdAt_DESC' }
+        const variables = { first: 10, skip: 0, orderBy: "createdAt_DESC" };
         cache.updateQuery({ query: FEED_QUERY, variables }, data => {
           if (data !== null) {
-            data.feed.links.unshift(newLink)
-            data.feed.count++
-            return data
+            data.feed.links.unshift(newLink);
+            data.feed.count++;
+            return data;
           } else {
-            return null
+            return null;
           }
-        })
+        });
       }
     }
   }
@@ -89,5 +94,3 @@ ReactDOM.render(
   </BrowserRouter>,
   document.getElementById('root'),
 );
-
-serviceWorker.unregister();

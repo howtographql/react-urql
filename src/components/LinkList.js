@@ -92,8 +92,9 @@ const LinkList = props => {
   useSubscription({ query: NEW_VOTES_SUBSCRIPTION });
   useSubscription({ query: NEW_LINKS_SUBSCRIPTION });
 
+  console.log(data && data.feed);
   const linksToRender = React.useMemo(() => {
-    if (!data) {
+    if (!data || !data.feed) {
       return [];
     } else if (isNewPage) {
       return data.feed.links;
@@ -104,12 +105,12 @@ const LinkList = props => {
       return rankedLinks;
     }
   }, [data, isNewPage]);
-
+  console.log(linksToRender);
   const nextPage = React.useCallback(() => {
     if (page <= data.feed.count / 10) {
       props.history.push(`/new/${page + 1}`);
     }
-  }, [props.history, data.feed.count, page]);
+  }, [props.history, data, page]);
 
   const previousPage = React.useCallback(() => {
     if (page > 1) {
