@@ -7,7 +7,6 @@ function post(parent, { url, description }, context) {
   return context.prisma.createLink({
     url,
     description,
-    votes: [],
     postedBy: {
       // connect: {
       //   id: userId
